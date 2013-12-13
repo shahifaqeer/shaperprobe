@@ -25,7 +25,7 @@
 
 /*
 * Packet replayer/cloner.
-  * 
+  *
   * November 2008.
   *
  */
@@ -97,7 +97,7 @@ int tryRandServers(unsigned long *serverList, int num_servers, int fileid)
 	char *visited = (char*)malloc(num_servers*sizeof(char));
 	memset(visited, 0, num_servers);
 	while(1)
-	{	
+	{
 		int flag = 0;
 		for(i = 0; i < num_servers; i++)
 		{
@@ -118,7 +118,7 @@ int tryRandServers(unsigned long *serverList, int num_servers, int fileid)
 			continue;
 		visited[num] = 1;
 		tcpsock = connect2server(serverList[num], fileid);
-		if(tcpsock == -1)	
+		if(tcpsock == -1)
 			continue;
 		break;
 	}
@@ -369,61 +369,13 @@ int main(int argc, char *argv[])
 	(capacityup > 100000) ? 195000 : capacityup, sleepRes, &measupcap, 0);
   mflowReceiver(tcpsock, udpsock, &measdowncap, fp, 0);
 
-  /* Anna: Remove capacity caps and shaping test.
-
-  //XXX: the meas code needs trains and lower cpu
-  //following two lines for 802.11a/b/g/n links
-  if(capacityup < 80000) capacityup = measupcap;
-  if(capacitydown < 80000) capacitydown = measdowncap;
-  if(capacityup > 200000)
-  {
-	  printf("Upstream: greater than 200 Mbps.\n");
-	  capacityup = 195000;
-  }
-  else
-  {
-	  printf("Upstream: %d Kbps.\n", (int)capacityup);
-//	  capacityup *= 0.95; //reduce loss-based aborts
-  }
-  truecapup = capacityup;
-  if(capacitydown > 200000)
-  {
-	  printf("Downstream: greater than 200 Mbps.\n");
-	  capacitydown = 195000;
-  }
-  else
-  {
-	  printf("Downstream: %d Kbps.\n", (int)capacitydown);
-//	  capacitydown *= 0.95; //reduce loss-based aborts
-  }
-  truecapdown = capacitydown;
-
-  printf("\nThe measurement will last for about %.1f minutes. Please wait.\n",
-	0.5*ceil(2*(
-	(2 * (60)  // probing + low-rate
-	+ (40560 + 3.5 * capacitydown * (60) ) * 8 / (1000*capacityup))/60)));  // to upload file 
-
-  printf("\nChecking for traffic shapers:\n\n");
-  mflowSender(tcpsock, udpsock, &from, -1, sleepRes, NULL, 1);
-  CHKRET(tbdetectSender(tcpsock, udpsock, &from, capacityup, sleepRes, 
-		  &tbresult, &tbmindepth, &tbmaxdepth, &tbrate, &tbabortflag, fp));
-  if(tbresult == 1) truecapup = tbrate;
-  printShaperResult(tbresult, tbmindepth, tbmaxdepth, tbrate, tbabortflag, 0, stdout);
-
-  mflowReceiver(tcpsock, udpsock, NULL, fp, 1);
-  CHKRET(tbdetectReceiver(tcpsock, udpsock, capacitydown, sleepRes,
-		  &tbresult, &tbmindepth, &tbmaxdepth, &tbrate, &tbabortflag, fp));
-  if(tbresult == 1) truecapdown = tbrate;
-  fclose(fp);
-  sendData(tcpsock, filename);
-  printShaperResult(tbresult, tbmindepth, tbmaxdepth, tbrate, tbabortflag, 1, stdout);
-
   close(udpsock);
   close(tcpsock);
   unlink(filename);
 
-  printf("\nFor more information, visit: http://www.cc.gatech.edu/~partha/diffprobe\n");
-  */
+  //printf("\nFor more information, visit: http://www.cc.gatech.edu/~partha/diffprobe\n");
+  printf("\nDONE\n");
+
   return(0);
 }
 

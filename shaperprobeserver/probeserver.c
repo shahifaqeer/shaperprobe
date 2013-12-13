@@ -1,6 +1,6 @@
 /*
  * Packet capturer.
- * 
+ *
  * November 2008.
  *
  */
@@ -53,14 +53,14 @@ void swaittv(int wait_time)
 {
 	/* Wait for based on select(2). Wait time is given in microsecs.  */
 	struct timeval tv;
-	tv.tv_sec = 0;   
-	tv.tv_usec = wait_time;  
+	tv.tv_sec = 0;
+	tv.tv_usec = wait_time;
 
 #if DEBUG
 	fprintf(stderr, "Waiting for %d microseconds.\n", wait_time);
 #endif
 
-	select(0,NULL,NULL,NULL,&tv);	
+	select(0,NULL,NULL,NULL,&tv);
 }
 
 char * ip2str(bpf_u_int32 ip)
@@ -233,7 +233,7 @@ int recvData(int tcpclientsock, FILE *fp, int direction /*0 up 1 down*/)
 		}
 		bytesleft -= ret;
 	}
-	
+
 	if(direction == 1)
 	fprintf(fp, "### DOWNSTREAM ###\n");
 	ret = fwrite((void *)buf, sizeof(char), len, fp);
@@ -318,22 +318,6 @@ while(1)
 	printf("downstream capacity: %.2f Kbps.\n", downcap);
 	if(upcap > upCapLimit /*200000*/) { upcap = upProbeLimit /*195000*/; } //else { upcap *= 0.95; }
 	if(downcap > downCapLimit /*200000*/) { downcap = downProbeLimit /*195000*/; } //else { downcap *= 0.95; }
-
-	printf("Checking for traffic shapers:\n");
-	if(clientversion > 3) //backwards-compatibility
-	mflowReceiver(tcpclientsock, udpsockcap, NULL, fp, 1);
-	CHKRET(tbdetectReceiver(tcpclientsock, udpsockcap, upcap, sleepRes,
-		&tbresult, &tbmindepth, &tbmaxdepth, &tbrate, &tbabortflag, fp));
-	if(tbresult == 1) trueupcap = tbrate;
-	printShaperResult(tbresult, tbmindepth, tbmaxdepth, tbrate, 0, fp);
-
-	if(clientversion > 3) //backwards-compatibility
-	mflowSender(tcpclientsock, udpsockcap, &from, -1, sleepRes, NULL, 1);
-	CHKRET(tbdetectSender(tcpclientsock, udpsockcap, &from, downcap, sleepRes,
-		&tbresult, &tbmindepth, &tbmaxdepth, &tbrate, &tbabortflag, fp));
-	if(tbresult == 1) truedowncap = tbrate;
-	printShaperResult(tbresult, tbmindepth, tbmaxdepth, tbrate, 1, fp);
-	recvData(tcpclientsock, fp, 1 /*0 up 1 down*/);
 
 	fclose(fp);
 	close(udpsockcap);

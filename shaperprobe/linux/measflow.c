@@ -43,7 +43,7 @@ struct timeval prober_packet_gap(struct timeval y, struct timeval x);
 void prober_swait(struct timeval tv, double sleepRes);
 void prober_sbusywait(struct timeval tv);
 
-int mflowSender(int tcpsock, int udpsock, struct sockaddr_in *from, 
+int mflowSender(int tcpsock, int udpsock, struct sockaddr_in *from,
 		double capacity, double sleepRes, double *recvrate, int lowprobe)
 {
 	pmflowstart startpkt;
@@ -101,7 +101,7 @@ int mflowSender(int tcpsock, int udpsock, struct sockaddr_in *from,
 		probepkt.usecs = htonl(sendts.tv_usec);
 		memcpy(buf, (char *)&probepkt, sizeof(struct _probe));
 
-		ret = sendto(udpsock, buf, pktsz, 0, 
+		ret = sendto(udpsock, buf, pktsz, 0,
 				(struct sockaddr *)from, fromlen);
 		if(ret == -1)
 		{
@@ -137,7 +137,7 @@ int mflowSender(int tcpsock, int udpsock, struct sockaddr_in *from,
 		{
 			if(FD_ISSET(tcpsock, &readset))
 			{
-				ret = readwrapper(tcpsock, (char *)&endpkt, 
+				ret = readwrapper(tcpsock, (char *)&endpkt,
 						sizeof(struct _mflowend));
 				if(ret == -1 || endpkt.header.ptype != P_MEASFLOW_END)
 				{
@@ -233,7 +233,7 @@ int mflowReceiver(int tcpsock, int udpsock, double *recvrate, FILE *fp, int lowp
 			unsigned int fromlen = sizeof(struct sockaddr_in);
 			struct timeval ts;
 			int probepktid = -1;
-			ret = recvfrom(udpsock, buf, 2000, 0, 
+			ret = recvfrom(udpsock, buf, 2000, 0,
 					(struct sockaddr *)&from, &fromlen);
 			if(ret == -1)
 			{
@@ -265,7 +265,7 @@ int mflowReceiver(int tcpsock, int udpsock, double *recvrate, FILE *fp, int lowp
 	}
 
 	if(recvrate != NULL)
-	*recvrate = nrecvd*(1400+UDPIPHEADERSZ)*0.008 
+	*recvrate = nrecvd*(1400+UDPIPHEADERSZ)*0.008
 			/(diffts.tv_sec + diffts.tv_usec*1.0e-6);
 
 	endpkt.header.ptype = P_MEASFLOW_END;
