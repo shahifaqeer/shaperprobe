@@ -13,7 +13,7 @@ prober.o: prober.c
 	$(CC) $(CFLAGS) prober.c tcp_client.c tcpserver.c wrappers.c tbdetect.c
 
 probeserver: probeserver.o
-	$(CC) probeserver.o wrappers.o tcpserver.o tcp_client.o tbdetect.o measflow.o -o shaperprobeserver $(LFLAGS)
+	$(CC) probeserver.o wrappers.o tcpserver.o tcp_client.o tbdetect.o measflow.o -o udpprobeserver $(LFLAGS)
 
 probeserver.o: probeserver.c
 	$(CC) $(CFLAGS) -DDSERVER probeserver.c wrappers.c tcpserver.c tcp_client.c tbdetect.c measflow.c
@@ -24,5 +24,5 @@ tbtest.o: prober.c
 	$(CC) $(CFLAGS) tbtest.c tcp_client.c tcpserver.c wrappers.c tbdetect.c
 
 clean:
-	rm -rf *.o prober probeserver shaperprobeserver
+	rm -rf *.o prober probeserver udpprobeserver
 

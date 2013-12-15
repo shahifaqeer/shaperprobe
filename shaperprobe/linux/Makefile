@@ -6,7 +6,7 @@ LDFLAGS=-lm
 
 SOURCES=prober.c tcp_client.c tcpserver.c wrappers.c tbdetect.c measflow.c
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=prober
+EXECUTABLE=udpprober
 
 all: clean $(SOURCES) $(EXECUTABLE)
 
@@ -17,4 +17,4 @@ $(EXECUTABLE): $(OBJECTS)
 		$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o prober
+	rm -rf *.o udpprober
