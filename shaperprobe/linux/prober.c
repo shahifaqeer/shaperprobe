@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
   gettimeofday(&tv, NULL);
   sin_addr.s_addr = serverip;
   memset(filename, 0, 256);
-  sprintf(filename, "%s_%d.txt", inet_ntoa(sin_addr), (int)tv.tv_sec);
+  sprintf(filename, "/tmp/udp_%s.log", inet_ntoa(sin_addr));
   fp = fopen(filename, "w");
   fprintf(fp, "sleep time resolution: %.2f ms.\n", sleepRes*1000);
 
@@ -350,28 +350,30 @@ int main(int argc, char *argv[])
   udpsock = udpclient(serverip, serv_port);
   CHKRET(udpsock);
   sin_addr.s_addr = serverip;
-  printf("Connected to server %s.\n", inet_ntoa(sin_addr));
+  fprintf(fp, "Connected to server %s.\n", inet_ntoa(sin_addr));
 
-  printf("\nEstimating capacity:\n");
+  fprintf(fp, "\nEstimating capacity:\n");
   capacityup = estimateCapacity(tcpsock, udpsock, &from);
   CHKRET(capacityup);
   CHKRET(sendCapEst(tcpsock));
-  printf("Upstream: %d Kbps.\n", (int)capacityup);
+  fprintf(fp, "Upstream: %d Kbps.\n", (int)capacityup);
   capacitydown = capacityEstimation(tcpsock, udpsock, &from, fp);
   CHKRET(capacitydown);
-  printf("Downstream: %d Kbps.\n", (int)capacitydown);
+  //printf("Downstream: %d Kbps.\n", (int)capacitydown);
 
-  mflowSender(tcpsock, udpsock, &from,
-	(capacityup > 100000) ? 195000 : capacityup, sleepRes, &measupcap, 0);
-  mflowReceiver(tcpsock, udpsock, &measdowncap, fp, 0);
+  // send to test log
+  printf("%s, %d, %.2f, %.2f\n",inet_ntoa(sin_addr), (int)tv.tv_sec, capacityup, capacitydown);
+  fprintf(fp, "LOG: %s, %s, %d, %.2f, %.2f\n", filename, inet_ntoa(sin_addr), (int)tv.tv_sec, capacityup, capacitydown);
+  // finished logging
 
   close(udpsock);
   close(tcpsock);
-  unlink(filename);
 
   //printf("\nFor more information, visit: http://www.cc.gatech.edu/~partha/diffprobe\n");
-  printf("\nDONE\n");
+  fprintf(fp, "\nDONE\n");
+  fclose(fp);
 
+  unlink(filename);
   return(0);
 }
 

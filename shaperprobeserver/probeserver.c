@@ -299,25 +299,11 @@ while(1)
 				&upcap, &downcap, &from, tracefile, fp, filename));
 	trueupcap = upcap; truedowncap = downcap;
 
-	if(clientversion > 3) // newer clients
-	{ upCapLimit = 200000; upProbeLimit = 195000;
-	downCapLimit = 200000; downProbeLimit = 195000; }
-
-	if(upcap > upCapLimit /*200000*/) { upcap = upProbeLimit /*195000*/; }
-	if(downcap > downCapLimit /*200000*/) { downcap = downProbeLimit /*195000*/; }
-
-	mflowReceiver(tcpclientsock, udpsockcap, &measupcap, fp, 0);
-	mflowSender(tcpclientsock, udpsockcap, &from, downcap, sleepRes, &measdowncap, 0);
-	printf("recvrates: up %f, down %f Kbps\n", measupcap, measdowncap);
-	upcap = measupcap; downcap = measdowncap;
-
 	fprintf(fp, "upstream capacity: %.2f Kbps.\n", upcap);
 	fprintf(fp, "downstream capacity: %.2f Kbps.\n", downcap);
 	fprintf(fp, "### UPSTREAM ###\n");
 	printf("upstream capacity: %.2f Kbps.\n", upcap);
 	printf("downstream capacity: %.2f Kbps.\n", downcap);
-	if(upcap > upCapLimit /*200000*/) { upcap = upProbeLimit /*195000*/; } //else { upcap *= 0.95; }
-	if(downcap > downCapLimit /*200000*/) { downcap = downProbeLimit /*195000*/; } //else { downcap *= 0.95; }
 
 	fclose(fp);
 	close(udpsockcap);
