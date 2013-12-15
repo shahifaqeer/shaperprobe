@@ -1,6 +1,8 @@
 *~
 *.o
+shaperprobe/linux/udpprober
 shaperprobe/linux/prober
 *.txt
 shaperprobeserver
+udpprobeserver
 dropbox
