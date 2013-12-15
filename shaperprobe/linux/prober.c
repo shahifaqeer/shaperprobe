@@ -238,7 +238,6 @@ int prober_config_load(int argc, char **argv, char *tracefile, int *fileid)
   case ':':
   case 'h':
   default:
-	  fprintf(stderr, "ShaperProbe beta candidate.\n\n");
 	  fprintf(stderr, "Usage: %s -s <server>\n", argv[0]);
 	  return -1;
   }
@@ -320,9 +319,6 @@ int main(int argc, char *argv[])
   extern double TB_RATE_AVG_INTERVAL;
 
   TB_RATE_AVG_INTERVAL = 0.3;
-
-  printf("DiffProbe release. January 2012.\n");
-  printf("Shaper Detection Module.\n\n");
 
   memset(tracefile, 0, 256);
   CHKRET(prober_config_load(argc, argv, tracefile, &fileid));
