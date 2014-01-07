@@ -107,16 +107,16 @@ int connect2server(unsigned int serverip, int fileid)
 	int sndsize = 1024*1024;
 	extern double TB_RATE_AVG_INTERVAL;
 
-	if ( (conn_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) 
+	if ( (conn_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
 	{
 		fprintf(stderr, "CLNT: Error creating listening socket.\n");
 		return -1;
 	}
 
-	ret = setsockopt(conn_s, SOL_SOCKET, SO_SNDBUF, 
+	ret = setsockopt(conn_s, SOL_SOCKET, SO_SNDBUF,
 			(char *)&sndsize, sizeof(int));
 	sndsize = 1024*1024;
-	ret = setsockopt(conn_s, SOL_SOCKET, SO_RCVBUF, 
+	ret = setsockopt(conn_s, SOL_SOCKET, SO_RCVBUF,
 			(char *)&sndsize, sizeof(int));
 
 	memset(&servaddr, 0, sizeof(servaddr));
@@ -167,10 +167,10 @@ int udpclient(unsigned int serverip, unsigned int targetport)
 		return -1;
 	}
 
-	ret = setsockopt(conn_s, SOL_SOCKET, SO_SNDBUF, 
+	ret = setsockopt(conn_s, SOL_SOCKET, SO_SNDBUF,
 			(char *)&sndsize, sizeof(int));
 	sndsize = 1024*1024;
-	ret = setsockopt(conn_s, SOL_SOCKET, SO_RCVBUF, 
+	ret = setsockopt(conn_s, SOL_SOCKET, SO_RCVBUF,
 			(char *)&sndsize, sizeof(int));
 
 	return conn_s;
@@ -229,7 +229,7 @@ double estimateCapacity_pairs(int tcpsock, int udpsock)
 			return -1;
 		}
 
-		ret = readwrapper(tcpsock, (char *)&pcapack, 
+		ret = readwrapper(tcpsock, (char *)&pcapack,
 				sizeof(struct _capestack));
 		if(ret == -1 || pcapack.header.ptype != P_CAP_ACK)
 		{
@@ -285,7 +285,7 @@ double estimateCapacity(int tcpsock, int udpsock, struct sockaddr_in *from)
 			probepkt.usecs = htonl(ts.tv_usec);
 			memcpy(buf, (char *)&probepkt, sizeof(struct _trainprobe));
 
-			ret = sendto(udpsock, buf, 1400, 0, 
+			ret = sendto(udpsock, buf, 1400, 0,
 					(struct sockaddr *)&frm, fromlen);
 			if(ret == -1)
 			{
@@ -295,7 +295,7 @@ double estimateCapacity(int tcpsock, int udpsock, struct sockaddr_in *from)
 		}
 		niters++;
 
-		ret = readwrapper(tcpsock, (char *)&pcapack, 
+		ret = readwrapper(tcpsock, (char *)&pcapack,
 				sizeof(struct _capestack));
 		if(ret == -1 || pcapack.header.ptype != P_CAP_ACK)
 		{
@@ -303,12 +303,12 @@ double estimateCapacity(int tcpsock, int udpsock, struct sockaddr_in *from)
 			return -1;
 		}
 		trainlength = ntohl(pcapack.trainlength);
-		printf("\33[2K\r"); printf("Upload packet train %d: %d Kbps", niters, ntohl(pcapack.capacity)); fflush(stdout);
+		//printf("\33[2K\r"); printf("Upload packet train %d: %d Kbps", niters, ntohl(pcapack.capacity)); fflush(stdout);
 		if(ntohl(pcapack.finalflag) == 1) break;
 		usleep(500000);
 	}
 
-	printf("\33[2K\r"); fflush(stdout);
+	//printf("\33[2K\r"); fflush(stdout);
 	return ntohl(pcapack.capacity);
 }
 #endif
@@ -337,7 +337,7 @@ int sendCapEst(int tcpsock)
 	pcapack.header.length = 0;
 	pcapack.capacity = pcapack.finalflag = 0;
 	pcapack.trainlength = htonl(TRAIN_LENGTH);
-	ret = writewrapper(tcpsock, (char *)&pcapack, 
+	ret = writewrapper(tcpsock, (char *)&pcapack,
 			sizeof(struct _capestack));
 	if(ret == -1)
 	{

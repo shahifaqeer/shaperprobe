@@ -38,8 +38,8 @@
 #define MAX_NLIPS 1//5
 
 #define LISTENQ (10)
-#define TRAIN_LENGTH 50 
-#define NITERATIONS 10
+#define TRAIN_LENGTH 50
+#define NITERATIONS 100
 #define SUBTRAINLEN 6
 #define TRAINGGTHRESH 0.5
 #define TRAINEQTHRESH 0.1

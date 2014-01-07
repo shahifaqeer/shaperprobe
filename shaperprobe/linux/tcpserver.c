@@ -56,10 +56,10 @@ int prober_bind_port(int port)
 		return -1;
 	}
 
-	ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF, 
+	ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF,
 			(char *)&sndsize, sizeof(int));
 	sndsize = 1024*1024;
-	ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF, 
+	ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF,
 			(char *)&sndsize, sizeof(int));
 
 	memset(&echoserver, 0, sizeof(echoserver));
@@ -90,7 +90,7 @@ int create_server()
 	int ret = 0;
 	int sndsize = 1024*1024;
 
-	if ( (list_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) 
+	if ( (list_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
 	{
 		fprintf(stderr, "SERV: Error creating listening socket.\n");
 		exit(-1);
@@ -98,10 +98,10 @@ int create_server()
 
 	optval = 1;
 	setsockopt(list_s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
-	ret = setsockopt(list_s, SOL_SOCKET, SO_SNDBUF, 
+	ret = setsockopt(list_s, SOL_SOCKET, SO_SNDBUF,
 			(char *)&sndsize, sizeof(int));
 	sndsize = 1024*1024;
-	ret = setsockopt(list_s, SOL_SOCKET, SO_RCVBUF, 
+	ret = setsockopt(list_s, SOL_SOCKET, SO_RCVBUF,
 			(char *)&sndsize, sizeof(int));
 
 	memset(&servaddr, 0, sizeof(servaddr));
@@ -109,13 +109,13 @@ int create_server()
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	servaddr.sin_port        = htons(port);
 
-	if ( bind(list_s, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0 ) 
+	if ( bind(list_s, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0 )
 	{
 		fprintf(stderr, "SERV: Error calling bind()\n");
 		exit(-1);
 	}
 
-	if ( listen(list_s, LISTENQ) < 0 ) 
+	if ( listen(list_s, LISTENQ) < 0 )
 	{
 		fprintf(stderr, "SERV: Error calling listen()\n");
 		exit(-1);
@@ -129,7 +129,7 @@ int handle_newclient(int conn_s, int udpsock0);
 int handle_clients(int list_s, int udpsock0)
 {
 	/*int conn_s;
-	while ( 1 ) 
+	while ( 1 )
 	{
 		// Wait for a connection, then accept() it
 		if ( (conn_s = accept(list_s, NULL, NULL) ) < 0 ) {
@@ -157,8 +157,8 @@ int handle_clients(int list_s, int udpsock0)
 	return conn_s;
 }
 
-int preprocess_newclient(int conn_s, int udpsock0, double *capacityup, 
-			double *capacitydown, struct sockaddr_in *from, 
+int preprocess_newclient(int conn_s, int udpsock0, double *capacityup,
+			double *capacitydown, struct sockaddr_in *from,
 			char *tracefile, FILE *fp)
 {
 	int ret = 0;
@@ -181,8 +181,8 @@ int preprocess_newclient(int conn_s, int udpsock0, double *capacityup,
 		switch(hdr.ptype)
 		{
 		case P_NEWCLIENT:
-			ret = readwrapper(conn_s, 
-				(char *)&pnewclient + szhdr, 
+			ret = readwrapper(conn_s,
+				(char *)&pnewclient + szhdr,
 				sizeof(struct _newclientpkt) - szhdr);
 			if(ret == -1)
 			{
@@ -191,11 +191,11 @@ int preprocess_newclient(int conn_s, int udpsock0, double *capacityup,
 				return -1;
 			}
 			//TB_RATE_AVG_INTERVAL = pnewclient.delta;
-			pnewack.compatibilityFlag = 
+			pnewack.compatibilityFlag =
 				(ntohl(pnewclient.version) == VERSION) ? 1 : 0;
 			pnewack.header.ptype = P_NEWCLIENT_ACK;
 			pnewack.header.length = 0;
-			ret = writewrapper(conn_s, (char *)&pnewack, 
+			ret = writewrapper(conn_s, (char *)&pnewack,
 					sizeof(struct _newclientack));
 			if(ret == -1)
 			{
@@ -214,7 +214,7 @@ int preprocess_newclient(int conn_s, int udpsock0, double *capacityup,
 			pcapack.header.length = 0;
 			pcapack.capacity = pcapack.finalflag = 0;
 			pcapack.trainlength = htonl(TRAIN_LENGTH);
-			ret = writewrapper(conn_s, (char *)&pcapack, 
+			ret = writewrapper(conn_s, (char *)&pcapack,
 					sizeof(struct _capestack));
 			if(ret == -1)
 			{
@@ -243,13 +243,13 @@ inline double timeval_diff(struct timeval x, struct timeval y)
 	struct timeval result;
 
 	/* Perform the carry for the later subtraction by updating y. */
-	if (x.tv_usec < y.tv_usec) 
+	if (x.tv_usec < y.tv_usec)
 	{
 		int nsec = (y.tv_usec - x.tv_usec) / 1000000 + 1;
 		y.tv_usec -= 1000000 * nsec;
 		y.tv_sec += nsec;
 	}
-	if (x.tv_usec - y.tv_usec > 1000000) 
+	if (x.tv_usec - y.tv_usec > 1000000)
 	{
 		int nsec = (x.tv_usec - y.tv_usec) / 1000000;
 		y.tv_usec += 1000000 * nsec;
@@ -371,24 +371,24 @@ double capacityEstimation_pairs(int tcpsock, int udpsock0)
 		{
 			//mindsumflag = (mindelaysum > owd1+owd2) ? 1 : 0;
 			mindelaysum = (mindelaysum > owd1+owd2) ? owd1+owd2 : mindelaysum;
-			mindsumflag = (fabs(owd1+owd2 - (mindelay1+mindelay2)) < 
+			mindsumflag = (fabs(owd1+owd2 - (mindelay1+mindelay2)) <
 					0.01/*0.01*(owd1+owd2)*/) ? 1 : 0; //TODO
 
 			gap = timeval_diff(t2, t1); //s
 			cap = 1.0e-3*ret1*8.0/gap; //Kbps
 			if(mindsumflag) { mindcap = cap; printf("FOUND!\n"); nfound++; }
-			printf("cap: %.2f Kbps d1:%f d2:%f sum:%f diff:%f\n", cap, owd1, 
+			printf("cap: %.2f Kbps d1:%f d2:%f sum:%f diff:%f\n", cap, owd1,
 					owd2, mindelaysum,fabs(owd1+owd2 - (mindelay1+mindelay2)));
 		}
 
 noudp:
 		pcapack.capacity = htonl(cap);
 		pcapack.finalflag = 0;
-		if(niters % 100 == 0 && nfound > 1) { 
+		if(niters % 100 == 0 && nfound > 1) {
 			pcapack.finalflag = htonl(1);
-			pcapack.capacity = htonl(mindcap); 
+			pcapack.capacity = htonl(mindcap);
 		}
-		ret = writewrapper(tcpsock, (char *)&pcapack, 
+		ret = writewrapper(tcpsock, (char *)&pcapack,
 				sizeof(struct _capestack));
 		if(ret == -1)
 		{
@@ -458,7 +458,7 @@ double capacityEstimation(int tcpsock, int udpsock0, struct sockaddr_in *from, F
 			if(FD_ISSET(udpsock0, &readset))
 			{
 				unsigned int fromlen = sizeof(struct sockaddr_in);
-				ret1 = recvfrom(udpsock0, buf, 2000, 0, 
+				ret1 = recvfrom(udpsock0, buf, 2000, 0,
 						(struct sockaddr *)from, &fromlen);
 				if(ret1 == -1)
 				{
@@ -489,7 +489,7 @@ double capacityEstimation(int tcpsock, int udpsock0, struct sockaddr_in *from, F
 		//fprintf(fp, "### TRAIN ###\n");
 		//for(count = 0; count < TRAIN_LENGTH; count++)
 		//{
-		//	fprintf(fp, "%f %f %d\n", 
+		//	fprintf(fp, "%f %f %d\n",
 		//			tsend[count].tv_sec+tsend[count].tv_usec*1e-6,
 		//			trecv[count].tv_sec+trecv[count].tv_usec*1e-6,
 		//			seq[count]);
@@ -505,17 +505,17 @@ double capacityEstimation(int tcpsock, int udpsock0, struct sockaddr_in *from, F
 		caps[niters-1] = cap;
 		traincaps[niters-1] = tcap;
 
-		printf("\33[2K\r"); printf("Download packet train %d: %.0f Kbps", niters, tcap); fflush(stdout);
+		//printf("\33[2K\r"); printf("Download packet train %d: %.0f Kbps", niters, tcap); fflush(stdout);
 		pcapack.capacity = htonl(cap);
 		pcapack.finalflag = 0;
 		pcapack.trainlength = htonl(TRAIN_LENGTH);
-		if(niters % NITERATIONS == 0) { 
+		if(niters % NITERATIONS == 0) {
 			pcapack.finalflag = htonl(1);
 			break;
 		}
 		if(niters > 10*NITERATIONS) break;
 
-		ret = writewrapper(tcpsock, (char *)&pcapack, 
+		ret = writewrapper(tcpsock, (char *)&pcapack,
 				sizeof(struct _capestack));
 		if(ret == -1)
 		{
@@ -525,7 +525,7 @@ double capacityEstimation(int tcpsock, int udpsock0, struct sockaddr_in *from, F
 		}
 	}
 
-	printf("\33[2K\r"); fflush(stdout);
+	//printf("\33[2K\r"); fflush(stdout);
 	ncaps = 0; pcaps = traincaps;
 /*	for(ret1=0; ret1<10*NITERATIONS; ret1++)
 	{
@@ -547,7 +547,7 @@ double capacityEstimation(int tcpsock, int udpsock0, struct sockaddr_in *from, F
 
 	pcapack.finalflag = htonl(1);
 	pcapack.capacity = htonl(mediancap);
-	ret = writewrapper(tcpsock, (char *)&pcapack, 
+	ret = writewrapper(tcpsock, (char *)&pcapack,
 			sizeof(struct _capestack));
 	if(ret == -1)
 	{
