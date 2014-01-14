@@ -14,7 +14,7 @@
 
 #define LISTENQ (10)
 #define TRAIN_LENGTH 50
-#define NITERATIONS 100
+#define NITERATIONS 10
 
 #define TBDURATION 60
 //#define TB_RATE_AVG_INTERVAL 0.3
