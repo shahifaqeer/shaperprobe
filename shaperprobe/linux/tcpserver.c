@@ -506,6 +506,7 @@ double capacityEstimation(int tcpsock, int udpsock0, struct sockaddr_in *from, F
 		traincaps[niters-1] = tcap;
 
 		//printf("\33[2K\r"); printf("Download packet train %d: %.0f Kbps", niters, tcap); fflush(stdout);
+		printf("Download packet train %d: %.0f Kbps\n", niters, tcap); fflush(stdout);
 		pcapack.capacity = htonl(cap);
 		pcapack.finalflag = 0;
 		pcapack.trainlength = htonl(TRAIN_LENGTH);

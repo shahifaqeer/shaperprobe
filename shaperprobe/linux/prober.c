@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
   sin_addr.s_addr = serverip;
   memset(filename, 0, 256);
   sprintf(filename, "/tmp/udp_%s.log", inet_ntoa(sin_addr));
-  fp = fopen(filename, "w");
+  fp = fopen(filename, "a+w");
   fprintf(fp, "sleep time resolution: %.2f ms.\n", sleepRes*1000);
 
   //udpsock = udpclient(serverip, SERV_PORT_UDP);

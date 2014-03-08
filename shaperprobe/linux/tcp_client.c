@@ -304,6 +304,7 @@ double estimateCapacity(int tcpsock, int udpsock, struct sockaddr_in *from)
 		}
 		trainlength = ntohl(pcapack.trainlength);
 		//printf("\33[2K\r"); printf("Upload packet train %d: %d Kbps", niters, ntohl(pcapack.capacity)); fflush(stdout);
+		printf("Upload packet train %d: %d Kbps\n", niters, ntohl(pcapack.capacity)); fflush(stdout);
 		if(ntohl(pcapack.finalflag) == 1) break;
 		usleep(500000);
 	}
