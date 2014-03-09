@@ -4,6 +4,7 @@ shaperprobe/linux/udpprober
 udpprobe/linux/udpprober
 shaperprobe/linux/prober
 *.txt
+*.swp
 shaperprobeserver
 udpprobeserver/udpprobeserver
 dropbox
